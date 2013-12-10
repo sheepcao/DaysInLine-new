@@ -7,10 +7,10 @@
 //
 
 #import "editingViewController.h"
+
 #import "globalVars.h"
 
-@interface editingViewController ()<UIActionSheetDelegate>
-
+@interface editingViewController ()<UIActionSheetDelegate,UITextFieldDelegate>
 
 
 
@@ -47,12 +47,14 @@ bool flag;
     self.endLabel = (UILabel *)[self.view viewWithTag:104];
     self.theme = (UITextField *)[self.view viewWithTag:105];
     self.mainText = (UITextView *)[self.view viewWithTag:106];
+    self.moneyButton = (UIButton *)[self.view viewWithTag:1004];
 
 	// Do any additional setup after loading the view.
     [self.startTimeButton addTarget:self action:@selector(startTimeTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.endTimeButton addTarget:self action:@selector(endTimeTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.saveButton addTarget:self action:@selector(saveTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.returnButton addTarget:self action:@selector(returnTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.moneyButton addTarget:self action:@selector(moneyTapped) forControlEvents:UIControlEventTouchUpInside];
     
     self.startTimeButton.layer.borderWidth = 3.5;
     self.startTimeButton.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -68,6 +70,44 @@ bool flag;
     NSLog(@"%@!!!!!!!!!!!",self.startLabel.text);
 
 }
+
+//tag = 3的actionsheet
+-(void)moneyTapped
+{
+    
+    NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"moneyView" owner:self options:nil];
+    
+    UIView *tmpCustomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320  , 480)];
+
+    tmpCustomView = [nib objectAtIndex:0];
+    NSLog(@"enable is : %d",tmpCustomView.userInteractionEnabled);
+    [tmpCustomView setUserInteractionEnabled:YES];
+    UITextField * income = (UITextField *)[tmpCustomView viewWithTag:501];
+    UITextField * outcome = (UITextField *)[tmpCustomView viewWithTag:502];
+    income.delegate =self;
+    outcome.delegate = self;
+
+
+    [income setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
+    [outcome setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
+    
+    UIButton *okButton =(UIButton *)[tmpCustomView viewWithTag:503];
+    [okButton addTarget:self action:@selector(okTapped) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *cancelButton =(UIButton *)[tmpCustomView viewWithTag:504];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                    message:nil
+                                                   delegate:self
+                                          cancelButtonTitle:@"确定"
+                                          otherButtonTitles:nil];
+   
+    alert.delegate = self;
+    [alert setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
+    [alert addSubview:tmpCustomView];
+    self.moneyAlert = alert;
+    [ self.moneyAlert  show];
+
+}
+
 
 //tag＝1的actionsheet
 -(void)startTimeTapped
@@ -332,6 +372,13 @@ bool flag;
     
 }
 
+-(void)okTapped
+{
+    UITextField * income = (UITextField *)[self.moneyAlert viewWithTag:501];
+    NSLog(@"!!1!!1");
+    [income resignFirstResponder];
+
+}
 
 -(void)returnTapped
 {
@@ -408,7 +455,9 @@ bool flag;
         
     }
 
-    
+    if (actionSheet.tag == 3) {
+         [actionSheet setBackgroundColor:[UIColor grayColor]];
+    }
 	
 }
 
@@ -425,6 +474,25 @@ bool flag;
                 [theTextField resignFirstResponder];
             }
         }
+        
     }
+}
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (!textField.window.isKeyWindow) {
+        [textField.window makeKeyAndVisible];
+    }
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+   
+    [textField resignFirstResponder];
+    return YES;
+}
+
+
+- (void)willPresentAlertView:(UIAlertView *)myAlertView {
+    myAlertView.frame = CGRectMake(0, 40, self.view.bounds.size.width, self.view.bounds.size.height/3);
 }
 @end

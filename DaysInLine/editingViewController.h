@@ -11,7 +11,7 @@
 #import "redrawButtonDelegate.h"
 
 
-@interface editingViewController : UIViewController {
+@interface editingViewController : UIViewController <UIAlertViewDelegate> {
     sqlite3 *dataBase;
     NSString *databasePath;
     NSNumber *startTimeNum;
@@ -33,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *returnButton;
 @property (weak, nonatomic) UILabel *startLabel;
 @property (weak, nonatomic) UILabel *endLabel;
+@property (strong, nonatomic) UIAlertView *moneyAlert;
 
 @property (weak, nonatomic) IBOutlet UITextView *mainText;
 @property (weak, nonatomic) IBOutlet UITextField *theme;

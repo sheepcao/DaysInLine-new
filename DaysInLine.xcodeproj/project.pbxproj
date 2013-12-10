@@ -30,6 +30,7 @@
 		0B9A53F81812274D0085FFD7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0B9A53F61812274D0085FFD7 /* InfoPlist.strings */; };
 		0B9A53FA1812274D0085FFD7 /* DaysInLineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B9A53F91812274D0085FFD7 /* DaysInLineTests.m */; };
 		0B9A5406181230990085FFD7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9A5405181230990085FFD7 /* Default.png */; };
+		0BA75344185607BA0059D90B /* moneyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0BA75343185607BA0059D90B /* moneyView.xib */; };
 		0BD7008318139338004FCBE2 /* backgroundHome.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BD7008218139338004FCBE2 /* backgroundHome.png */; };
 		0BD700861813ABFB004FCBE2 /* homeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BD700851813ABFB004FCBE2 /* homeView.m */; };
 		0BD7008B1813BC66004FCBE2 /* daylineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BD7008A1813BC66004FCBE2 /* daylineView.m */; };
@@ -77,6 +78,7 @@
 		0B9A53F71812274D0085FFD7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0B9A53F91812274D0085FFD7 /* DaysInLineTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DaysInLineTests.m; sourceTree = "<group>"; };
 		0B9A5405181230990085FFD7 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		0BA75343185607BA0059D90B /* moneyView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = moneyView.xib; path = ../../DaysInLine/DaysInLine/moneyView.xib; sourceTree = "<group>"; };
 		0BB629D31829233B00D9B859 /* redrawButtonDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = redrawButtonDelegate.h; sourceTree = "<group>"; };
 		0BB629D418293F3C00D9B859 /* globalVars.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = globalVars.h; sourceTree = "<group>"; };
 		0BD7008218139338004FCBE2 /* backgroundHome.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backgroundHome.png; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 				0BD7008D1814242C004FCBE2 /* dayLineScoller.m */,
 				0B929ECF18154B94008E1726 /* buttonInScroll.h */,
 				0B929ED018154B94008E1726 /* buttonInScroll.m */,
+				0BA75343185607BA0059D90B /* moneyView.xib */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				0B9A53D91812274D0085FFD7 /* InfoPlist.strings in Resources */,
 				0B929EDD18156F1E008E1726 /* icon.png in Resources */,
 				0B929EE1181572C1008E1726 /* star1.png in Resources */,
+				0BA75344185607BA0059D90B /* moneyView.xib in Resources */,
 				0B9A53E21812274D0085FFD7 /* Main.storyboard in Resources */,
 				0BD7008318139338004FCBE2 /* backgroundHome.png in Resources */,
 				0B916CFA1816B43300B3F41D /* editingView.xib in Resources */,
