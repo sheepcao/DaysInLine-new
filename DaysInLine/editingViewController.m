@@ -19,6 +19,7 @@
 @implementation editingViewController
 
 bool flag;
+double incomeFinal;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -31,6 +32,8 @@ bool flag;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    incomeFinal=0.0f;
     
     NSString *docsDir;
     NSArray *dirPaths;
@@ -74,10 +77,11 @@ bool flag;
 //tag = 3的actionsheet
 -(void)moneyTapped
 {
+    NSNumber *income_mdfy;
     
     NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"moneyView" owner:self options:nil];
     
-    UIView *tmpCustomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320  , 480)];
+    UIView *tmpCustomView = [[UIView alloc] initWithFrame:CGRectMake(0, 40, self.view.bounds.size.width, self.view.bounds.size.height/3)];
 
     tmpCustomView = [nib objectAtIndex:0];
     NSLog(@"enable is : %d",tmpCustomView.userInteractionEnabled);
@@ -91,13 +95,44 @@ bool flag;
     [income setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
     [outcome setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
     
+    if (modifying == 1) {
+        sqlite3_stmt *statement;
+        const char *dbpath = [databasePath UTF8String];
+        if (sqlite3_open(dbpath, &dataBase)==SQLITE_OK) {
+            NSString *queryEvent = [NSString stringWithFormat:@"SELECT income,expend from event where eventID=\"%d\"",modifyEventId];
+            const char *queryEventstatment = [queryEvent UTF8String];
+            if (sqlite3_prepare_v2(dataBase, queryEventstatment, -1, &statement, NULL)==SQLITE_OK) {
+                if (sqlite3_step(statement)==SQLITE_ROW) {
+                    //找到要修改的事件，取出数据。
+                    
+                    
+                    income_mdfy = [[NSNumber alloc] initWithDouble:sqlite3_column_double(statement, 0)];
+                    NSLog(@"AAAAAAA%@",income_mdfy);
+                    
+                    
+                }
+                
+            }
+            sqlite3_finalize(statement);
+        }
+        else {
+            NSLog(@"数据库打开失败");
+            
+        }
+        sqlite3_close(dataBase);
+        
+        [income setText:[NSString stringWithFormat:@"%.2f",[income_mdfy doubleValue]]];
+    }
+    
     UIButton *okButton =(UIButton *)[tmpCustomView viewWithTag:503];
     [okButton addTarget:self action:@selector(okTapped) forControlEvents:UIControlEventTouchUpInside];
     UIButton *cancelButton =(UIButton *)[tmpCustomView viewWithTag:504];
+    [cancelButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+    
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
                                                     message:nil
                                                    delegate:self
-                                          cancelButtonTitle:@"确定"
+                                          cancelButtonTitle:@"ok"
                                           otherButtonTitles:nil];
    
     alert.delegate = self;
@@ -282,7 +317,7 @@ bool flag;
                         sqlite3_bind_text(statement,2, [self.theme.text UTF8String], -1, SQLITE_TRANSIENT);
                         sqlite3_bind_text(statement,3, [self.mainText.text UTF8String], -1, SQLITE_TRANSIENT);
                         //未添加功能的数据
-                        sqlite3_bind_int(statement,4, 0);
+                        sqlite3_bind_double(statement,4, incomeFinal);
                         sqlite3_bind_int(statement,5, 0);
                         
                         sqlite3_bind_text(statement,6, [modifyDate UTF8String], -1, SQLITE_TRANSIENT);
@@ -327,7 +362,7 @@ bool flag;
                             sqlite3_bind_text(statement,1, [self.theme.text UTF8String], -1, SQLITE_TRANSIENT);
                             sqlite3_bind_text(statement,2, [self.mainText.text UTF8String], -1, SQLITE_TRANSIENT);
                             //未添加功能的数据
-                            sqlite3_bind_int(statement,3, 0);
+                            sqlite3_bind_double(statement,4, incomeFinal);
                             sqlite3_bind_int(statement,4, 0);
                             
                             sqlite3_bind_double(statement,5, [startTimeNum doubleValue]);
@@ -375,9 +410,27 @@ bool flag;
 -(void)okTapped
 {
     UITextField * income = (UITextField *)[self.moneyAlert viewWithTag:501];
-    NSLog(@"!!1!!1");
+    NSString *incomeText = income.text;
+    incomeFinal=[incomeText doubleValue];
+    NSLog(@"BBBBBBBBB%f",incomeFinal);
+   
+    
     [income resignFirstResponder];
 
+}
+
+-(void)cancelTapped
+{
+  //  UIView *viewInAlert = (UIView *)[self.moneyAlert viewWithTag:500];
+   // [viewInAlert removeFromSuperview];
+   // [viewInAlert.window resignKeyWindow];
+  //  [self.moneyAlert removeFromSuperview];
+    [self.moneyAlert dismissWithClickedButtonIndex:(int)nil animated:YES];
+    
+ 
+    [self.view.window makeKeyAndVisible];
+    
+    
 }
 
 -(void)returnTapped
@@ -493,6 +546,6 @@ bool flag;
 
 
 - (void)willPresentAlertView:(UIAlertView *)myAlertView {
-    myAlertView.frame = CGRectMake(0, 40, self.view.bounds.size.width, self.view.bounds.size.height/3);
+    myAlertView.frame = CGRectMake(0, 65, self.view.bounds.size.width, self.view.bounds.size.height/3);
 }
 @end

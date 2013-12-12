@@ -320,6 +320,7 @@
     NSString *mainTxt_mdfy;
     NSNumber *evtID_mdfy;
     NSNumber *evtType_mdfy;
+  
     NSString *startTime;
     NSString *endTime;
  
@@ -332,7 +333,7 @@
     sqlite3_stmt *statement;
     const char *dbpath = [databasePath UTF8String];
     if (sqlite3_open(dbpath, &dataBase)==SQLITE_OK) {
-        NSString *queryEvent = [NSString stringWithFormat:@"SELECT eventID,type,title,mainText,startTime,endTime from event where DATE=\"%@\" and startArea=\"%d\"",modifyDate,[startArea intValue]];
+        NSString *queryEvent = [NSString stringWithFormat:@"SELECT eventID,type,title,mainText,startTime,endTime,income from event where DATE=\"%@\" and startArea=\"%d\"",modifyDate,[startArea intValue]];
         const char *queryEventstatment = [queryEvent UTF8String];
         if (sqlite3_prepare_v2(dataBase, queryEventstatment, -1, &statement, NULL)==SQLITE_OK) {
             if (sqlite3_step(statement)==SQLITE_ROW) {
@@ -360,6 +361,7 @@
                     NSLog(@"nsstring_mdfy  is %@",mainTxt_mdfy);
                 }
                 
+                
                 NSNumber *startTm = [[NSNumber alloc] initWithDouble:sqlite3_column_double(statement,4)];
                int start = [startTm intValue]+360;
                 NSNumber *endTm = [[NSNumber alloc] initWithDouble:sqlite3_column_double(statement,5)];
@@ -380,7 +382,7 @@
                 
                 NSLog(@"start time is:%@",startTime);
                 
-                
+                              
             }
             
         }
@@ -394,6 +396,9 @@
     editingViewController *my_modifyViewController = [[editingViewController alloc] initWithNibName:@"editingView" bundle:nil];
     my_modifyViewController.drawBtnDelegate = self.my_scoller;
     
+    
+    
+    
     //将该事件还原现使出来
     my_modifyViewController.eventType = evtType_mdfy;
     [(UITextField*)[my_modifyViewController.view viewWithTag:105] setText:title_mdfy] ;
@@ -402,8 +407,10 @@
     [(UILabel*)[my_modifyViewController.view viewWithTag:104] setText:endTime];
     [(UIButton*)[my_modifyViewController.view viewWithTag:101] setTitle:@"" forState:UIControlStateNormal];
     [(UIButton*)[my_modifyViewController.view viewWithTag:102] setTitle:@"" forState:UIControlStateNormal];
+ //   [(UITextField*)[my_modifyViewController.moneyAlert viewWithTag:501] setText:[NSString stringWithFormat:@"%.2f",[income_mdfy floatValue]]];
     modifyEventId = [evtID_mdfy intValue];
     NSLog(@"eventID is : %d",modifyEventId);
+   // NSLog(@"income is &&&&&&: %@",[NSString stringWithFormat:@"%.2f",[income_mdfy floatValue]]);
     
     
     my_modifyViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
